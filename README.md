@@ -1,4 +1,4 @@
-**小智ESP32**デバイスと**LM Studio**を接続するためのPython製WebSocketサーバーです。
+Antigravityのテスト用に生成した**小智ESP32**デバイスと**LM Studio**を接続するためのPython製WebSocketサーバーです。
 
 ## コンポーネント
 - **Server**: `xiaozhi_bridge/server.py` (WebSocketサーバー)
