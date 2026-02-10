@@ -63,8 +63,11 @@ Antigravityのテスト用に生成した**小智ESP32**デバイスと**LM Stud
    protocol_ = std::make_unique<WebsocketProtocol>();
    ```    
    
-   に変更してください。その後、ファームウェアを再ビルドして書き込んでください：
-
+   に変更してください。
+   この変更により、デバイス起動時に必ず WebSocket モードで動作し、
+   指定されたローカル IP アドレス（172.20.10.5 など）のサーバーを探しに行くようになっています。
+   
+   その後、ファームウェアを再ビルドして書き込んでください：
     
     ```bash
     idf.py build flash monitor
