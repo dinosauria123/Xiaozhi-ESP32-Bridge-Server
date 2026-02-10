@@ -43,22 +43,29 @@ Antigravityのテスト用に生成した**小智ESP32**デバイスと**LM Stud
     ```
     *`192.168.1.100` の部分は、実際のLAN IPアドレスに置き換えてください。*
 
-    また、`xiaozhi-esp32/main/protocols/application_protocol.cc` を開き、`
+    また、`xiaozhi-esp32/main/protocols/application_protocol.cc` 480行目付近を開き、`
 
-    -   // 変更前
--   Settings settings("app", false);
--   if (settings.GetString("protocol") == "mqtt") {
--       protocol_ = std::make_unique<MqttProtocol>();
--   } else {
--       protocol_ = std::make_unique<WebsocketProtocol>();
--   }
+   ```cpp
 
-+   // 変更後
-+   // Force WebSocket protocol for local server connection
-+   ESP_LOGI(TAG, "Using WebSocket protocol (forced)");
-+   protocol_ = std::make_unique<WebsocketProtocol>();
+   // 変更前
+   
+   Settings settings("app", false);
+   if (settings.GetString("protocol") == "mqtt") {
+       protocol_ = std::make_unique<MqttProtocol>();
+   } else {
+       protocol_ = std::make_unique<WebsocketProtocol>();
+   }
+
+   // 変更後
+   
+   // Force WebSocket protocol for local server connection
+   ESP_LOGI(TAG, "Using WebSocket protocol (forced)");
+   protocol_ = std::make_unique<WebsocketProtocol>();
+   ```    
+   
+   に変更してください。その後、ファームウェアを再ビルドして書き込んでください：
+
     
-    に変更してください。その後、ファームウェアを再ビルドして書き込んでください：
     ```bash
     idf.py build flash monitor
     ```
