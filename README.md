@@ -1,66 +1,68 @@
+小智ブリッジサーバー ウォークスルー
+概要
+小智ESP32デバイスとLM Studioを接続するためのPython製WebSocketサーバーです。
 
-A Python-based WebSocket server that bridges the Xiaozhi ESP32 device with LM Studio.
-
-Components
+コンポーネント
 Server: 
 xiaozhi_bridge/server.py
- (WebSocket server)
+ (WebSocketサーバー)
 Protocol: 
 xiaozhi_bridge/protocol.py
- (Handles Xiaozhi v3 protocol)
+ (小智 v3プロトコルの処理)
 Audio: 
 xiaozhi_bridge/audio_utils.py
- (Opus <-> PCM conversion)
-ASR: Faster-Whisper (local)
-TTS: Edge-TTS (online)
-LLM: LM Studio (local OpenAI API)
-Setup
-Install Dependencies:
+ (Opus <-> PCM変換)
+ASR: Faster-Whisper (ローカル音声認識)
+TTS: Edge-TTS (オンライン音声合成)
+LLM: LM Studio (ローカルOpenAI互換API)
+セットアップ
+依存関係のインストール:
 
 bash
 ./run.sh
-(or manually: pip install -r requirements.txt)
+(または手動で: pip install -r requirements.txt)
 
-Start LM Studio:
+LM Studioの起動:
 
-Load a model.
-Start the Local Server on port 1234.
-Run Bridge Server:
+モデルをロードしてください。
+ポート1234でローカルサーバーを開始してください。
+ブリッジサーバーの実行:
 
 bash
 ./run.sh
-Configure Device: To point your Xiaozhi ESP32 to this server, you need to modify the firmware source code before building/flashing.
+デバイスの設定: 小智ESP32をこのサーバーに向けるには、ビルド/書き込みの前にファームウェアのソースコードを変更する必要があります。
 
-Open xiaozhi-esp32/main/protocols/websocket_protocol.cc and modify the OpenAudioChannel method (around line 85):
+xiaozhi-esp32/main/protocols/websocket_protocol.cc を開き、OpenAudioChannel メソッド（85行目付近）を修正してください：
 
 cpp
 bool WebsocketProtocol::OpenAudioChannel() {
     Settings settings("websocket", false);
-    // Original: std::string url = settings.GetString("url");
+    // 元のコード: std::string url = settings.GetString("url");
     
-    // Modify to point to your computer's IP:
+    // コンピュータのIPアドレスに向けるように修正:
     std::string url = "ws://192.168.1.100:8000"; 
     
     std::string token = settings.GetString("token");
     // ...
 }
-Replace 192.168.1.100 with your actual LAN IP address.
+192.168.1.100 の部分は、実際のLAN IPアドレスに置き換えてください。
 
-Then rebuild and flash the firmware:
+その後、ファームウェアを再ビルドして書き込んでください：
 
 bash
 idf.py build flash monitor
-Verification
-Run python test_client.py to verify the server is reachable and protocol is working.
-Verification Results
-I have verified the server implementation by running 
+検証
+python test_client.py を実行して、サーバーへの到達性とプロトコルの動作を確認できます。
+検証結果
 test_client.py
-. Server Log:
+ を実行して、サーバーの実装を検証しました。
+
+サーバーログ:
 
 New connection from ('127.0.0.1', 50976)
 Received JSON: {'type': 'hello', ...}
 Sent Hello response
-Client Log:
+クライアントログ:
 
 Connected!
 Sent Hello
