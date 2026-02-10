@@ -1,0 +1,6 @@
+websockets
+openai
+faster-whisper
+edge-tts
+opuslib
+numpy
