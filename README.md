@@ -1,69 +1,69 @@
+**小智ESP32**デバイスと**LM Studio**を接続するためのPython製WebSocketサーバーです。
 
-小智ESP32デバイスとLM Studioを接続するためのPython製WebSocketサーバーです。
+## コンポーネント
+- **Server**: `xiaozhi_bridge/server.py` (WebSocketサーバー)
+- **Protocol**: `xiaozhi_bridge/protocol.py` (小智 v3プロトコルの処理)
+- **Audio**: `xiaozhi_bridge/audio_utils.py` (Opus <-> PCM変換)
+- **ASR**: Faster-Whisper (ローカル音声認識)
+- **TTS**: Edge-TTS (オンライン音声合成)
+- **LLM**: LM Studio (ローカルOpenAI互換API)
 
-コンポーネント
-Server: 
-xiaozhi_bridge/server.py
- (WebSocketサーバー)
-Protocol: 
-xiaozhi_bridge/protocol.py
- (小智 v3プロトコルの処理)
-Audio: 
-xiaozhi_bridge/audio_utils.py
- (Opus <-> PCM変換)
-ASR: Faster-Whisper (ローカル音声認識)
-TTS: Edge-TTS (オンライン音声合成)
-LLM: LM Studio (ローカルOpenAI互換API)
-セットアップ
-依存関係のインストール:
+## セットアップ
+1.  **依存関係のインストール**:
+    ```bash
+    ./run.sh
+    ```
+    (または手動で: `pip install -r requirements.txt`)
 
-bash
-./run.sh
-(または手動で: pip install -r requirements.txt)
+2.  **LM Studioの起動**:
+    - モデルをロードしてください。
+    - ポート`1234`でローカルサーバーを開始してください。
 
-LM Studioの起動:
+3.  **ブリッジサーバーの実行**:
+    ```bash
+    ./run.sh
+    ```
 
-モデルをロードしてください。
-ポート1234でローカルサーバーを開始してください。
-ブリッジサーバーの実行:
-
-bash
-./run.sh
-デバイスの設定: 小智ESP32をこのサーバーに向けるには、ビルド/書き込みの前にファームウェアのソースコードを変更する必要があります。
-
-xiaozhi-esp32/main/protocols/websocket_protocol.cc を開き、OpenAudioChannel メソッド（85行目付近）を修正してください：
-
-cpp
-bool WebsocketProtocol::OpenAudioChannel() {
-    Settings settings("websocket", false);
-    // 元のコード: std::string url = settings.GetString("url");
+4.  **デバイスの設定**:
+    小智ESP32をこのサーバーに向けるには、ビルド/書き込みの前にファームウェアのソースコードを変更する必要があります。
     
-    // コンピュータのIPアドレスに向けるように修正:
-    std::string url = "ws://192.168.1.100:8000"; 
+    `xiaozhi-esp32/main/protocols/websocket_protocol.cc` を開き、`OpenAudioChannel` メソッド（85行目付近）を修正してください：
+
+    ```cpp
+    bool WebsocketProtocol::OpenAudioChannel() {
+        Settings settings("websocket", false);
+        // 元のコード: std::string url = settings.GetString("url");
+        
+        // コンピュータのIPアドレスに向けるように修正:
+        std::string url = "ws://192.168.1.100:8000"; 
+        
+        std::string token = settings.GetString("token");
+        // ...
+    }
+    ```
+    *`192.168.1.100` の部分は、実際のLAN IPアドレスに置き換えてください。*
     
-    std::string token = settings.GetString("token");
-    // ...
-}
-192.168.1.100 の部分は、実際のLAN IPアドレスに置き換えてください。
+    その後、ファームウェアを再ビルドして書き込んでください：
+    ```bash
+    idf.py build flash monitor
+    ```
 
-その後、ファームウェアを再ビルドして書き込んでください：
+## 検証
+- `python test_client.py` を実行して、サーバーへの到達性とプロトコルの動作を確認できます。
 
-bash
-idf.py build flash monitor
-検証
-python test_client.py を実行して、サーバーへの到達性とプロトコルの動作を確認できます。
-検証結果
-test_client.py
- を実行して、サーバーの実装を検証しました。
+## 検証結果
+`test_client.py` を実行して、サーバーの実装を検証しました。
 
-サーバーログ:
-
+**サーバーログ:**
+```
 New connection from ('127.0.0.1', 50976)
 Received JSON: {'type': 'hello', ...}
 Sent Hello response
-クライアントログ:
-
+```
+**クライアントログ:**
+```
 Connected!
 Sent Hello
 Received: {"type": "hello", ...}
 Handshake successful!
+```
