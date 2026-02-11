@@ -49,12 +49,14 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
 
    // 変更前
    
-   Settings settings("app", false);
-   if (settings.GetString("protocol") == "mqtt") {
-       protocol_ = std::make_unique<MqttProtocol>();
-   } else {
-       protocol_ = std::make_unique<WebsocketProtocol>();
-   }
+    if (ota_->HasMqttConfig()) {
+        protocol_ = std::make_unique<MqttProtocol>();
+    } else if (ota_->HasWebsocketConfig()) {
+        protocol_ = std::make_unique<WebsocketProtocol>();
+    } else {
+        ESP_LOGW(TAG, "No protocol specified in the OTA config, using MQTT");
+        protocol_ = std::make_unique<MqttProtocol>();
+    }
 
    // 変更後
    
