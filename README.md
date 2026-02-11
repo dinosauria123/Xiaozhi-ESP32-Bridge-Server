@@ -43,7 +43,7 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
     ```
     *`192.168.1.100` の部分は、実際のLAN IPアドレスに置き換えてください。*
 
-    また、`xiaozhi-esp32/main/protocols/application.cc` 480行目付近を開き、`
+    また、`xiaozhi-esp32/main/application.cc` 480行目付近を開き、`
 
    ```cpp
 
