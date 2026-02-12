@@ -71,10 +71,9 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
    
    その後、ファームウェアを再ビルドして（https://github.com/dinosauria123/Xiaozhi-ESP32-Bridge-Server/blob/main/merged-binary.bin
    ）書き込んでください：
-    
-    ```bash
+   ```bash    
     esptool --chip esp32s3 write_flash 0x0 merged-binary.bin
-    ```
+   ```
 
 ## 検証
 - `python test_client.py` を実行して、サーバーへの到達性とプロトコルの動作を確認できます。
