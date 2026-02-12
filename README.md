@@ -69,7 +69,7 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
    この変更により、デバイス起動時に必ず WebSocket モードで動作し、
    指定されたローカル IP アドレス（172.20.10.5 など）のサーバーを探しに行くようになっています。
    
-   その後、ファームウェアを再ビルドして書き込んでください：
+   その後、ファームウェアを再ビルドして（https://github.com/dinosauria123/Xiaozhi-ESP32-Bridge-Server/blob/main/merged-binary.bin）書き込んでください：
     
     ```bash
     idf.py build flash monitor
