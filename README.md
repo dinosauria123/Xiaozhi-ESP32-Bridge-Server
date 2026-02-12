@@ -73,7 +73,7 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
    ）書き込んでください：
     
     ```bash
-    idf.py build flash monitor
+    esptool --chip esp32s3 write_flash 0x0 merged-binary.bin
     ```
 
 ## 検証
