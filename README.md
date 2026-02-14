@@ -74,6 +74,10 @@ Antigravityのテストで生成した**小智ESP32**デバイスと**LM Studio*
    ```bash    
     esptool --chip esp32s3 write_flash 0x0 merged-binary.bin
    ```
+改造した小智ESP32のソースコードは
+https://github.com/dinosauria123/xiaozhi-esp32-local
+にあります。
+
 
 ## 検証
 - `python test_client.py` を実行して、サーバーへの到達性とプロトコルの動作を確認できます。
