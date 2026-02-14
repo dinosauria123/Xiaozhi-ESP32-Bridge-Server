@@ -147,7 +147,7 @@ class XiaozhiServer:
 async def main():
     server = XiaozhiServer()
     async with websockets.serve(server.handle_connection, HOST, PORT):
-        print(f"Xiaozhi Bridge Server running on ws://{HOST}:{PORT}")
+        print(f"Xiaozhi Bridge Server running on ws://{HOST}:{PORT}", flush=True)
         await asyncio.Future()  # Run forever
 
 if __name__ == "__main__":

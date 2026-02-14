@@ -3,4 +3,6 @@ openai
 faster-whisper
 edge-tts
 opuslib
-numpy
+numpy<2
+ctranslate2==4.5.0
+setuptools==69.5.1

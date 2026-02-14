@@ -4,7 +4,7 @@ import numpy as np
 
 class ASREngine:
     def __init__(self, model_size="tiny", device="cpu", compute_type="int8"):
-        print(f"Loading Whisper model: {model_size} on {device}...")
+        print(f"Loading Whisper model: {model_size} on {device}...", flush=True)
         self.model = WhisperModel(model_size, device=device, compute_type=compute_type)
 
     def transcribe(self, audio_data):
